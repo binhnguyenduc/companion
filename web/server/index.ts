@@ -88,8 +88,11 @@ if (process.env.NODE_ENV === "production") {
   app.get("/*", serveStatic({ path: resolve(distDir, "index.html") }));
 }
 
+const hostname = process.env.HOST || "localhost";
+
 const server = Bun.serve<SocketData>({
   port,
+  hostname,
   async fetch(req, server) {
     const url = new URL(req.url);
 
@@ -147,9 +150,9 @@ const server = Bun.serve<SocketData>({
   },
 });
 
-console.log(`Server running on http://localhost:${server.port}`);
+console.log(`Server running on http://${server.hostname}:${server.port}`);
 console.log(`  CLI WebSocket:     ws://localhost:${server.port}/ws/cli/:sessionId`);
-console.log(`  Browser WebSocket: ws://localhost:${server.port}/ws/browser/:sessionId`);
+console.log(`  Browser WebSocket: ws://${server.hostname}:${server.port}/ws/browser/:sessionId`);
 
 if (process.env.NODE_ENV !== "production") {
   console.log("Dev mode: frontend at http://localhost:5174");
