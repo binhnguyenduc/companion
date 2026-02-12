@@ -19,9 +19,10 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const packageRoot = process.env.__VIBE_PACKAGE_ROOT || resolve(__dirname, "..");
 
 const port = Number(process.env.PORT) || 3456;
+const hostname = process.env.HOST || "localhost";
 const sessionStore = new SessionStore();
 const wsBridge = new WsBridge();
-const launcher = new CliLauncher(port);
+const launcher = new CliLauncher(port, hostname);
 const worktreeTracker = new WorktreeTracker();
 
 // ── Restore persisted sessions from disk ────────────────────────────────────
@@ -87,8 +88,6 @@ if (process.env.NODE_ENV === "production") {
   app.use("/*", serveStatic({ root: distDir }));
   app.get("/*", serveStatic({ path: resolve(distDir, "index.html") }));
 }
-
-const hostname = process.env.HOST || "localhost";
 
 const server = Bun.serve<SocketData>({
   port,
