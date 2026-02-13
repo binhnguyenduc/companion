@@ -270,7 +270,7 @@ export function HomePage() {
     await doCreateSession(msg);
   }
 
-  async function doCreateSession(msg: string) {
+  async function doCreateSession(msg: string, opts?: { skipPull?: boolean }) {
     if (!msg) {
       setSending(false);
       return;
@@ -292,6 +292,7 @@ export function HomePage() {
         branch: branchName,
         createBranch: branchName && isNewBranch ? true : undefined,
         useWorktree: useWorktree || undefined,
+        skipPull: opts?.skipPull || undefined,
         backend,
         codexInternetAccess: backend === "codex" ? codexInternetAccess : undefined,
       });
@@ -361,7 +362,7 @@ export function HomePage() {
 
       setPullPrompt(null);
       setPulling(false);
-      await doCreateSession(text.trim());
+      await doCreateSession(text.trim(), { skipPull: true });
     } catch (e: unknown) {
       setPullError(e instanceof Error ? e.message : String(e));
       setPulling(false);
@@ -372,7 +373,7 @@ export function HomePage() {
     const msg = text.trim();
     setPullPrompt(null);
     setPullError("");
-    doCreateSession(msg);
+    doCreateSession(msg, { skipPull: true });
   }
 
   function handleCancelPull() {
