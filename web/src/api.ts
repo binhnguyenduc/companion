@@ -84,6 +84,7 @@ export interface CreateSessionOpts {
   branch?: string;
   createBranch?: boolean;
   useWorktree?: boolean;
+  skipPull?: boolean;
   backend?: "claude" | "codex";
   container?: ContainerCreateOpts;
 }
